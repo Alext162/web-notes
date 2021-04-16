@@ -1,4 +1,9 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This project is being created to show off some of my React skills! It is a Google Keep-like app that currently allows users
+to add notes, edit notes, filter notes and more. The stack used is React, Node & Firebase (firenotes).
+
+Current UI (although changing all the time):
+
+![Web-notes-ui](src/assets/example-ui.png?raw=true "Web Notes UI")
 
 ## Available Scripts
 
