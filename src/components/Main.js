@@ -97,13 +97,11 @@ const Main = (props) => {
   const handleTextInput = (value) => {
     setText(value);
     props.onTextChange(value);
-    props.onEditNoteValuesChange(value);
   };
 
   const handleTitleInput = (value) => {
     setTitle(value);
     props.onTitleChange(value);
-    props.onEditNoteValuesChange(value);
   };
 
   return (
@@ -134,7 +132,7 @@ const Main = (props) => {
             <Title
               type="text"
               name=""
-              id=""
+              id="title-input"
               placeholder="Enter Title..."
               value={title}
               onFocus={() => props.onTitleFocus(true)}
@@ -150,7 +148,6 @@ const Main = (props) => {
                 props.onTextFocus(true);
                 textAreaRef.current.focus();
               }}
-              // onInput={() => autoGrow(textAreaRef)}
               onBlur={() => props.onTextFocus(false)}
               ref={textAreaRef}
               style={{ marginBottom: "20px" }}
@@ -168,6 +165,7 @@ const Main = (props) => {
                 onClick={() => {
                   props.onCreateNote();
                   setText("");
+                  setTitle("");
                 }}
               >
                 Add Note
@@ -207,10 +205,10 @@ const Main = (props) => {
                 <Note
                   note={note}
                   onDeleteNote={(state) => props.onDeleteNote(state)}
-                  onEditNote={() => props.onEditNote()}
+                  onEditNote={(id) => props.onEditNote(id)}
                   key={note.id}
-                  handleTextInput={(e) => handleTextInput(e)}
-                  handleTitleInput={(e) => handleTitleInput(e)}
+                  onEditNoteText={(state) => props.onEditNoteText(state)}
+                  onEditNoteTitle={(state) => props.onEditNoteTitle(state)}
                 />
               </Paper>
             </Grid>

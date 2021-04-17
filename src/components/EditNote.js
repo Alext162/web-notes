@@ -1,16 +1,10 @@
-import React, { useState } from "react";
-import TextField from "@material-ui/core/TextField";
+import React, { useState, useEffect } from "react";
 import Dialog from "@material-ui/core/Dialog";
-import DialogActions from "@material-ui/core/DialogActions";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogContentText from "@material-ui/core/DialogContentText";
-import DialogTitle from "@material-ui/core/DialogTitle";
 import Button from "react-bootstrap/Button";
 import ReactQuill from "react-quill";
-import "react-quill/dist/quill.snow.css";
-
 import { CirclePicker } from "react-color";
 import styled from "styled-components";
+import "react-quill/dist/quill.snow.css";
 
 const Title = styled.input`
   border: none;
@@ -31,20 +25,29 @@ const Title = styled.input`
 const colors = ["#FF6900", "#FCB900", "#7BDCB5", "#8ED1FC", "#EB144C"];
 
 const EditNote = (props) => {
-  const [open, setOpen] = useState(false);
   const { title, text, id } = props.noteDetails;
 
-  const handleClickOpen = () => {
+  const [open, setOpen] = useState(false);
+
+  const handleOpenModal = () => {
     setOpen(true);
   };
 
-  const handleClose = () => {
+  const handleCloseModal = () => {
     setOpen(false);
   };
 
   const handleEdit = () => {
     setOpen(false);
-    props.onEditNote();
+    props.onEditNote(id);
+  };
+
+  const handleTextOnChange = (e) => {
+    props.onEditNoteText(e);
+  };
+
+  const handleTitleOnChange = (e) => {
+    props.onEditNoteTitle(e);
   };
 
   return (
@@ -52,7 +55,7 @@ const EditNote = (props) => {
       <Button
         variant="outlined"
         color="primary"
-        onClick={handleClickOpen}
+        onClick={handleOpenModal}
         className="btn-outline-info btn-sm"
         style={{ backgroundColor: "#3b4253", position: "absolute", borderRadius: "20px", borderWidth: "2px", height: "35px", marginLeft: "180px" }}
       >
@@ -60,7 +63,7 @@ const EditNote = (props) => {
       </Button>
       <Dialog
         open={open}
-        onClose={handleClose}
+        onClose={handleCloseModal}
         PaperProps={{
           style: {
             backgroundColor: "#ffffff",
@@ -69,13 +72,13 @@ const EditNote = (props) => {
           },
         }}
       >
-        <Title type="text" name="" id="" value={title} onChange={() => props.handleTitleInput()} style={{ marginLeft: "10px" }} />
-        <ReactQuill placeholder="Take a note..." value={text} onChange={() => props.handleTextInput()} style={{ marginBottom: "20px", color: "black" }} />
+        <Title type="text" name="" id="edit-title-input" value={title} onChange={(e) => handleTitleOnChange(e.target.value)} style={{ marginLeft: "10px" }} />
+        <ReactQuill id="edit-text-input" placeholder="Take a note..." value={text} onChange={(e) => handleTextOnChange(e)} style={{ marginBottom: "20px", color: "black" }} />
         <div style={{ marginLeft: "20px", marginBottom: "-33px" }}>
           <CirclePicker colors={colors} />
         </div>
         <div style={{ marginRight: "20px", marginBottom: "20px" }}>
-          <Button className="btn-outline" style={{ backgroundColor: "#a05050", float: "right", borderColor: "#a05050" }} onClick={handleClose}>
+          <Button className="btn-outline" style={{ backgroundColor: "#a05050", float: "right", borderColor: "#a05050" }} onClick={handleCloseModal}>
             Close
           </Button>
           <Button className="btn-outline bt-m" style={{ backgroundColor: "#505c75", float: "right", borderColor: "#505c75", marginRight: "10px" }} onClick={handleEdit}>

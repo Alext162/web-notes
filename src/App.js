@@ -11,16 +11,18 @@ function App() {
   const [showInput, setShowInput] = useState(false);
   const [textFocused, setTextFocused] = useState(false);
   const [titleFocused, setTitleFocused] = useState(false);
+
   const [textValue, setTextValue] = useState("");
   const [titleValue, setTitleValue] = useState("");
+
+  const [EditedTextValue, setEditedTextValue] = useState("");
+  const [EditedTitleValue, setEditedTitleValue] = useState("");
+  const [noteIdToEdit, setNoteIdToEdit] = useState("");
+
   const [colorValue, setColorValue] = useState("#000000");
   const [colorFilterValue, setColorFilterValue] = useState("#000000");
   const [noteToDelete, setDeletedNote] = useState("");
   const [notes, setNotes] = useState([]);
-
-  //state for editing notes
-  const [noteToEditValues, setNoteToEditValues] = useState({ title: "", text: "", id: "" });
-  const [noteToEdit, setNoteToEdit] = useState({});
 
   const ref = firebase.firestore().collection("notes");
 
@@ -47,7 +49,7 @@ function App() {
       console.log(error);
     }
   };
-  // const updateNote = () => {};
+
   const addNote = () => {
     if (!textFocused && !titleFocused) {
       if (textValue.length !== 0 && titleValue.length !== 0) {
@@ -68,14 +70,13 @@ function App() {
           setColorFilterValue("#000000");
           getData();
         }
-      } else {
-        toast.info("Please add title & body!");
       }
+    } else {
+      toast.info("Please add title & body!");
     }
   };
 
   const deleteNote = async () => {
-    console.log(noteToDelete);
     if (noteToDelete !== "") {
       try {
         await firebase.firestore().collection("notes").doc(noteToDelete).delete();
@@ -89,20 +90,19 @@ function App() {
   };
 
   const editNote = async () => {
-    const { id, title, text } = noteToEditValues;
-    try {
-      await firebase.firestore().collection("notes").doc(id).update({ title: title, text: text });
-    } catch (err) {
-      console.log(err);
-    } finally {
-      setNoteToEditValues({});
-      getData();
-      toast.info("Note Edited :)");
-    }
-  };
+    console.log(EditedTitleValue);
+    console.log(EditedTextValue);
 
-  const handleEditValues = (values) => {
-    console.log("🚀 ~ file: App.js ~ line 105 ~ handleEditValues ~ values", values);
+    // const { id } = noteToEditValues;
+    // try {
+    //   await firebase.firestore().collection("notes").doc(id).update({ title: title, text: text });
+    // } catch (err) {
+    //   console.log(err);
+    // } finally {
+    //   setNoteToEditValues({});
+    //   getData();
+    //   toast.info("Note Edited :)");
+    // }
   };
 
   useEffect(() => {
@@ -113,7 +113,7 @@ function App() {
   useEffect(() => {
     editNote();
     // eslint-disable-next-line
-  }, [noteToEdit]);
+  }, [noteIdToEdit]);
 
   useEffect(() => {
     getData();
@@ -138,8 +138,9 @@ function App() {
         onColorChange={(state) => setColorValue(state)}
         onColorFilterChange={(state) => setColorFilterValue(state)}
         onDeleteNote={(state) => setDeletedNote(state)}
-        onEditNoteValuesChange={(state) => handleEditValues(state)}
-        onEditNote={() => setNoteToEdit()}
+        onEditNoteTitle={(state) => setEditedTitleValue(state)}
+        onEditNoteText={(state) => setEditedTextValue(state)}
+        onEditNote={(id) => setNoteIdToEdit(id)}
         onCreateNote={() => addNote()}
         onGetData={() => getData()}
         notes={notes}

@@ -23,7 +23,12 @@ const Note = (props) => {
     <NoteDiv>
       <H>{title}</H>
       <P>{parse(text)}</P>
-      <EditNote noteDetails={props.note} handleTextInput={() => props.handleTextInput()} handleTitleInput={() => props.handleTitleInput()} onEditNote={() => props.onEditNote()} />
+      <EditNote
+        noteDetails={props.note}
+        onEditNoteText={(state) => props.onEditNoteText(state)}
+        onEditNoteTitle={(state) => props.onEditNoteTitle(state)}
+        onEditNote={(id) => props.onEditNote(id)}
+      />
       <Button
         className="btn-outline-danger btn-sm"
         style={{ backgroundColor: "#3b4253", position: "absolute", borderRadius: "20px", borderWidth: "2px", height: "35px", width: "35px", marginLeft: "230px" }}
