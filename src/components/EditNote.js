@@ -26,6 +26,7 @@ const colors = ["#FF6900", "#FCB900", "#7BDCB5", "#8ED1FC", "#EB144C"];
 
 const EditNote = (props) => {
   const { title, text, id } = props.noteDetails;
+  const [updatedText, setText] = useState(text);
 
   const [open, setOpen] = useState(false);
 
@@ -43,6 +44,7 @@ const EditNote = (props) => {
   };
 
   const handleTextOnChange = (e) => {
+    setText(e);
     props.onEditNoteText(e);
   };
 
@@ -73,7 +75,13 @@ const EditNote = (props) => {
         }}
       >
         <Title type="text" name="" id="edit-title-input" value={title} onChange={(e) => handleTitleOnChange(e.target.value)} style={{ marginLeft: "10px" }} />
-        <ReactQuill id="edit-text-input" placeholder="Take a note..." value={text} onChange={(e) => handleTextOnChange(e)} style={{ marginBottom: "20px", color: "black" }} />
+        <ReactQuill
+          id="edit-text-input"
+          placeholder="Take a note..."
+          value={updatedText}
+          onChange={(e) => handleTextOnChange(e)}
+          style={{ marginBottom: "20px", color: "black" }}
+        />
         <div style={{ marginLeft: "20px", marginBottom: "-33px" }}>
           <CirclePicker colors={colors} />
         </div>

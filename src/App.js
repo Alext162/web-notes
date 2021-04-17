@@ -38,7 +38,7 @@ function App() {
         if (colorFilterValue === "#000000") {
           setNotes(notesArr);
         } else {
-          const filteredNotes = notesArr.filter((item, idx) => item.color === colorFilterValue);
+          const filteredNotes = notesArr.filter((item) => item.color === colorFilterValue);
           setNotes(filteredNotes);
         }
       } else {
@@ -90,19 +90,14 @@ function App() {
   };
 
   const editNote = async () => {
-    console.log(EditedTitleValue);
-    console.log(EditedTextValue);
-
-    // const { id } = noteToEditValues;
-    // try {
-    //   await firebase.firestore().collection("notes").doc(id).update({ title: title, text: text });
-    // } catch (err) {
-    //   console.log(err);
-    // } finally {
-    //   setNoteToEditValues({});
-    //   getData();
-    //   toast.info("Note Edited :)");
-    // }
+    try {
+      await firebase.firestore().collection("notes").doc(noteIdToEdit).update({ text: EditedTextValue });
+    } catch (err) {
+      console.log(err);
+    } finally {
+      getData();
+      toast.info("Note Edited :)");
+    }
   };
 
   useEffect(() => {
