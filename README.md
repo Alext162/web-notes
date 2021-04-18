@@ -3,7 +3,7 @@ to add notes, edit notes, filter notes and more. The stack used is React, Node &
 
 Current UI (although changing all the time):
 
-![Web-notes-ui](src/assets/example-ui.png?raw=true "Web Notes UI")
+![Web-notes-ui](src/assets/web_notes_example.gif "Web Notes UI")
 
 ## Available Scripts
 
