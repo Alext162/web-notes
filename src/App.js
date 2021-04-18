@@ -17,6 +17,7 @@ function App() {
 
   const [editedTitleValue, setEditedTitleValue] = useState("");
   const [editedTextValue, setEditedTextValue] = useState("");
+  const [editedColorValue, setEditedColorValue] = useState("");
 
   const [colorValue, setColorValue] = useState("#000000");
   const [colorFilterValue, setColorFilterValue] = useState("#000000");
@@ -87,11 +88,9 @@ function App() {
   };
 
   const editNote = async (id) => {
-    console.log("🚀 ~ file: App.js ~ line 92 ~ editNote ~ editedTitleValue.length", editedTitleValue.length);
-    console.log("🚀 ~ file: App.js ~ line 92 ~ editNote ~ editedTextValue.length", editedTextValue.length);
     if (editedTextValue.length !== 0 || editedTitleValue.length !== 0) {
       try {
-        await firebase.firestore().collection("notes").doc(id).update({ text: editedTextValue, title: editedTitleValue });
+        await firebase.firestore().collection("notes").doc(id).update({ text: editedTextValue, title: editedTitleValue, color: editedColorValue });
       } catch (err) {
         console.log(err);
       } finally {
@@ -131,6 +130,7 @@ function App() {
         onDeleteNote={(state) => setDeletedNote(state)}
         onEditNoteTitle={(state) => setEditedTitleValue(state)}
         onEditNoteText={(state) => setEditedTextValue(state)}
+        onEditNoteColor={(state) => setEditedColorValue(state)}
         onEditNote={(id) => editNote(id)}
         onCreateNote={() => addNote()}
         onGetData={() => getData()}

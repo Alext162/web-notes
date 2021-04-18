@@ -27,6 +27,7 @@ const Note = (props) => {
         noteDetails={props.note}
         onEditNoteText={(state) => props.onEditNoteText(state)}
         onEditNoteTitle={(state) => props.onEditNoteTitle(state)}
+        onEditNoteColor={(state) => props.onEditNoteColor(state)}
         onEditNote={(id) => props.onEditNote(id)}
       />
       <Button

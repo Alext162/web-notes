@@ -26,6 +26,7 @@ const colors = ["#FF6900", "#FCB900", "#7BDCB5", "#8ED1FC", "#EB144C"];
 
 const EditNote = (props) => {
   const { title, text, id } = props.noteDetails;
+  const [color, setColor] = useState("#2196f3");
   const [updatedText, setText] = useState(text);
   const [updatedTitle, setTitle] = useState(title);
   const [open, setOpen] = useState(false);
@@ -47,12 +48,21 @@ const EditNote = (props) => {
     setText(e);
     props.onEditNoteText(e);
     props.onEditNoteTitle(title);
+    props.onEditNoteColor(color);
   };
 
   const handleTitleOnChange = (e) => {
     setTitle(e);
     props.onEditNoteTitle(e);
     props.onEditNoteText(text);
+    props.onEditNoteColor(color);
+  };
+
+  const handleColorOnChange = (e) => {
+    setColor(e.hex);
+    props.onEditNoteTitle(title);
+    props.onEditNoteText(text);
+    props.onEditNoteColor(e.hex);
   };
 
   return (
@@ -86,7 +96,7 @@ const EditNote = (props) => {
           style={{ marginBottom: "20px", color: "black" }}
         />
         <div style={{ marginLeft: "20px", marginBottom: "-33px" }}>
-          <CirclePicker colors={colors} />
+          <CirclePicker colors={colors} color={color} onChangeComplete={(e) => handleColorOnChange(e)} />
         </div>
         <div style={{ marginRight: "20px", marginBottom: "20px" }}>
           <Button className="btn-outline" style={{ backgroundColor: "#a05050", float: "right", borderColor: "#a05050" }} onClick={handleCloseModal}>

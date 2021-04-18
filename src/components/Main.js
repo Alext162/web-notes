@@ -209,6 +209,7 @@ const Main = (props) => {
                   key={note.id}
                   onEditNoteText={(state) => props.onEditNoteText(state)}
                   onEditNoteTitle={(state) => props.onEditNoteTitle(state)}
+                  onEditNoteColor={(state) => props.onEditNoteColor(state)}
                 />
               </Paper>
             </Grid>
