@@ -21,7 +21,6 @@ function App() {
 
   const [colorValue, setColorValue] = useState("#000000");
   const [colorFilterValue, setColorFilterValue] = useState("#000000");
-  const [noteToDelete, setDeletedNote] = useState("");
   const [notes, setNotes] = useState([]);
 
   const ref = firebase.firestore().collection("notes");
@@ -74,10 +73,10 @@ function App() {
     }
   };
 
-  const deleteNote = async () => {
-    if (noteToDelete !== "") {
+  const deleteNote = async (noteId) => {
+    if (noteId !== "") {
       try {
-        await firebase.firestore().collection("notes").doc(noteToDelete).delete();
+        await firebase.firestore().collection("notes").doc(noteId).delete();
       } catch (err) {
         console.log(err);
       } finally {
@@ -101,11 +100,6 @@ function App() {
   };
 
   useEffect(() => {
-    deleteNote();
-    // eslint-disable-next-line
-  }, [noteToDelete]);
-
-  useEffect(() => {
     getData();
     // eslint-disable-next-line
   }, [colorFilterValue]);
@@ -127,11 +121,11 @@ function App() {
         onTitleChange={(state) => setTitleValue(state)}
         onColorChange={(state) => setColorValue(state)}
         onColorFilterChange={(state) => setColorFilterValue(state)}
-        onDeleteNote={(state) => setDeletedNote(state)}
         onEditNoteTitle={(state) => setEditedTitleValue(state)}
         onEditNoteText={(state) => setEditedTextValue(state)}
         onEditNoteColor={(state) => setEditedColorValue(state)}
         onEditNote={(id) => editNote(id)}
+        onDeleteNote={(id) => deleteNote(id)}
         onCreateNote={() => addNote()}
         onGetData={() => getData()}
         notes={notes}
