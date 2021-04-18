@@ -27,7 +27,7 @@ const colors = ["#FF6900", "#FCB900", "#7BDCB5", "#8ED1FC", "#EB144C"];
 const EditNote = (props) => {
   const { title, text, id } = props.noteDetails;
   const [updatedText, setText] = useState(text);
-
+  const [updatedTitle, setTitle] = useState(title);
   const [open, setOpen] = useState(false);
 
   const handleOpenModal = () => {
@@ -46,10 +46,13 @@ const EditNote = (props) => {
   const handleTextOnChange = (e) => {
     setText(e);
     props.onEditNoteText(e);
+    props.onEditNoteTitle(title);
   };
 
   const handleTitleOnChange = (e) => {
+    setTitle(e);
     props.onEditNoteTitle(e);
+    props.onEditNoteText(text);
   };
 
   return (
@@ -74,7 +77,7 @@ const EditNote = (props) => {
           },
         }}
       >
-        <Title type="text" name="" id="edit-title-input" value={title} onChange={(e) => handleTitleOnChange(e.target.value)} style={{ marginLeft: "10px" }} />
+        <Title type="text" name="" id="edit-title-input" value={updatedTitle} onChange={(e) => handleTitleOnChange(e.target.value)} style={{ marginLeft: "10px" }} />
         <ReactQuill
           id="edit-text-input"
           placeholder="Take a note..."

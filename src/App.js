@@ -12,12 +12,11 @@ function App() {
   const [textFocused, setTextFocused] = useState(false);
   const [titleFocused, setTitleFocused] = useState(false);
 
-  const [textValue, setTextValue] = useState("");
   const [titleValue, setTitleValue] = useState("");
+  const [textValue, setTextValue] = useState("");
 
-  const [EditedTextValue, setEditedTextValue] = useState("");
-  const [EditedTitleValue, setEditedTitleValue] = useState("");
-  const [noteIdToEdit, setNoteIdToEdit] = useState("");
+  const [editedTitleValue, setEditedTitleValue] = useState("");
+  const [editedTextValue, setEditedTextValue] = useState("");
 
   const [colorValue, setColorValue] = useState("#000000");
   const [colorFilterValue, setColorFilterValue] = useState("#000000");
@@ -51,25 +50,23 @@ function App() {
   };
 
   const addNote = () => {
-    if (!textFocused && !titleFocused) {
-      if (textValue.length !== 0 && titleValue.length !== 0) {
-        setShowInput(false);
-        let noteObj = {
-          title: titleValue,
-          text: textValue,
-          color: colorValue,
-        };
-        try {
-          ref.add(noteObj);
-        } catch (error) {
-          console.log(error);
-        } finally {
-          setTextValue("");
-          setTitleValue("");
-          setColorValue("#000000");
-          setColorFilterValue("#000000");
-          getData();
-        }
+    if (textValue.length !== 0 && titleValue.length !== 0) {
+      setShowInput(false);
+      let noteObj = {
+        title: titleValue,
+        text: textValue,
+        color: colorValue,
+      };
+      try {
+        ref.add(noteObj);
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setTextValue("");
+        setTitleValue("");
+        setColorValue("#000000");
+        setColorFilterValue("#000000");
+        getData();
       }
     } else {
       toast.info("Please add title & body!");
@@ -89,14 +86,18 @@ function App() {
     }
   };
 
-  const editNote = async () => {
-    try {
-      await firebase.firestore().collection("notes").doc(noteIdToEdit).update({ text: EditedTextValue });
-    } catch (err) {
-      console.log(err);
-    } finally {
-      getData();
-      toast.info("Note Edited :)");
+  const editNote = async (id) => {
+    console.log("🚀 ~ file: App.js ~ line 92 ~ editNote ~ editedTitleValue.length", editedTitleValue.length);
+    console.log("🚀 ~ file: App.js ~ line 92 ~ editNote ~ editedTextValue.length", editedTextValue.length);
+    if (editedTextValue.length !== 0 || editedTitleValue.length !== 0) {
+      try {
+        await firebase.firestore().collection("notes").doc(id).update({ text: editedTextValue, title: editedTitleValue });
+      } catch (err) {
+        console.log(err);
+      } finally {
+        getData();
+        toast.info("Note Edited :)");
+      }
     }
   };
 
@@ -104,11 +105,6 @@ function App() {
     deleteNote();
     // eslint-disable-next-line
   }, [noteToDelete]);
-
-  useEffect(() => {
-    editNote();
-    // eslint-disable-next-line
-  }, [noteIdToEdit]);
 
   useEffect(() => {
     getData();
@@ -135,7 +131,7 @@ function App() {
         onDeleteNote={(state) => setDeletedNote(state)}
         onEditNoteTitle={(state) => setEditedTitleValue(state)}
         onEditNoteText={(state) => setEditedTextValue(state)}
-        onEditNote={(id) => setNoteIdToEdit(id)}
+        onEditNote={(id) => editNote(id)}
         onCreateNote={() => addNote()}
         onGetData={() => getData()}
         notes={notes}
