@@ -10,6 +10,7 @@ import { toast } from "react-toastify";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 
+//defines the spacing and alignment of individual notes
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
@@ -19,9 +20,6 @@ const useStyles = makeStyles((theme) => ({
     textAlign: "center",
   },
 }));
-
-//preset colors for color picker
-const colors = ["#FF6900", "#FCB900", "#7BDCB5", "#8ED1FC", "#EB144C"];
 
 const NoteInput = styled.form`
   box-shadow: 0 1px 2px 0 rgba(60, 64, 67, 0.3), 0 2px 6px 2px rgba(60, 64, 67, 0.15);
@@ -84,6 +82,7 @@ const Main = (props) => {
     onEditNoteColor,
   } = props;
 
+  const colors = ["#FF6900", "#FCB900", "#7BDCB5", "#8ED1FC", "#EB144C"];
   const classes = useStyles();
   const [color, setColor] = useState("#2196f3");
   const [text, setText] = useState("");
@@ -91,6 +90,7 @@ const Main = (props) => {
   const [filterColor, setFilterColor] = useState("#2196f3");
   const textAreaRef = useRef(null);
 
+  // auto increases input text box size when typing
   const autoGrow = (elem) => {
     elem.current.style.height = "5px";
     elem.current.style.height = 10 + elem.current.scrollHeight + "px";
@@ -128,6 +128,7 @@ const Main = (props) => {
     <main>
       <NoteInput action="">
         {!showInput ? (
+          // start of collapsed text input
           <>
             <TextArea
               name=""
@@ -148,6 +149,7 @@ const Main = (props) => {
             />
           </>
         ) : (
+          // end of collapsed text input
           <>
             <Title
               type="text"
@@ -195,6 +197,8 @@ const Main = (props) => {
           </>
         )}
       </NoteInput>
+      {/*end of note input */}
+      {/* start of individual note display */}
       <div style={{ position: "absolute", marginLeft: "50px" }}>
         <CirclePicker colors={colors} color={filterColor} onChangeComplete={(e) => handleColorFilterEvent(e)} width="50px" />
         <Button

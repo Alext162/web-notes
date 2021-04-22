@@ -28,6 +28,8 @@ const EditNote = (props) => {
   const [updatedText, setText] = useState(text);
   const [updatedTitle, setTitle] = useState(title);
   const [open, setOpen] = useState(false);
+
+  //if a color is already defined use that, else use the new user selected color
   const colorValue = updatedColor.length === 0 ? color : updatedColor;
 
   const handleOpenModal = () => {

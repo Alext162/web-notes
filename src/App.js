@@ -24,6 +24,7 @@ function App() {
   const [notes, setNotes] = useState([]);
 
   const ref = firebase.firestore().collection("notes");
+
   const getData = async () => {
     let notesArr = [];
     try {
@@ -44,7 +45,7 @@ function App() {
         toast.info("No notes :(");
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 
@@ -59,7 +60,7 @@ function App() {
       try {
         ref.add(noteObj);
       } catch (error) {
-        console.log(error);
+        console.error(error);
       } finally {
         setTextValue("");
         setTitleValue("");
