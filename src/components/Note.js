@@ -18,22 +18,24 @@ const P = styled.h3`
 
 const Note = (props) => {
   const { title, text, id } = props.note;
+  const { onEditNoteText, onEditNote, onEditNoteTitle, onEditNoteColor, onDeleteNote, colors, note } = props;
 
   return (
     <NoteDiv>
       <H>{title}</H>
       <P>{parse(text)}</P>
       <EditNote
-        noteDetails={props.note}
-        onEditNoteText={(state) => props.onEditNoteText(state)}
-        onEditNoteTitle={(state) => props.onEditNoteTitle(state)}
-        onEditNoteColor={(state) => props.onEditNoteColor(state)}
-        onEditNote={(id) => props.onEditNote(id)}
+        noteDetails={note}
+        onEditNoteText={(state) => onEditNoteText(state)}
+        onEditNoteTitle={(state) => onEditNoteTitle(state)}
+        onEditNoteColor={(state) => onEditNoteColor(state)}
+        onEditNote={(id, originalColor) => onEditNote(id, originalColor)}
+        colors={colors}
       />
       <Button
         className="btn-outline-danger btn-sm"
         style={{ backgroundColor: "#3b4253", position: "absolute", borderRadius: "20px", borderWidth: "2px", height: "35px", width: "35px", marginLeft: "230px" }}
-        onClick={() => props.onDeleteNote(id)}
+        onClick={() => onDeleteNote(id)}
       >
         X
       </Button>

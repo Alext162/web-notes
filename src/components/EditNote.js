@@ -13,23 +13,22 @@ const Title = styled.input`
   width: 100%;
   font-size: 18px;
   margin: 10px 0;
-  // display:none;
   outline: none;
+  margin-left: 10px;
   &::placeholder {
     color: #3c4043;
     opacity: 1;
   }
 `;
 
-//preset colors for color picker
-const colors = ["#FF6900", "#FCB900", "#7BDCB5", "#8ED1FC", "#EB144C"];
-
 const EditNote = (props) => {
-  const { title, text, id } = props.noteDetails;
-  const [color, setColor] = useState("#2196f3");
+  const { title, text, id, color } = props.noteDetails;
+  const { onEditNoteText, onEditNote, onEditNoteTitle, onEditNoteColor } = props;
+  const [updatedColor, setColor] = useState("");
   const [updatedText, setText] = useState(text);
   const [updatedTitle, setTitle] = useState(title);
   const [open, setOpen] = useState(false);
+  const colorValue = updatedColor.length === 0 ? color : updatedColor;
 
   const handleOpenModal = () => {
     setOpen(true);
@@ -41,28 +40,28 @@ const EditNote = (props) => {
 
   const handleEdit = () => {
     setOpen(false);
-    props.onEditNote(id);
+    onEditNote(id);
   };
 
   const handleTextOnChange = (e) => {
     setText(e);
-    props.onEditNoteText(e);
-    props.onEditNoteTitle(title);
-    props.onEditNoteColor(color);
+    onEditNoteText(e);
+    onEditNoteTitle(title);
+    onEditNoteColor(colorValue);
   };
 
   const handleTitleOnChange = (e) => {
     setTitle(e);
-    props.onEditNoteTitle(e);
-    props.onEditNoteText(text);
-    props.onEditNoteColor(color);
+    onEditNoteTitle(e);
+    onEditNoteText(text);
+    onEditNoteColor(colorValue);
   };
 
   const handleColorOnChange = (e) => {
     setColor(e.hex);
-    props.onEditNoteTitle(title);
-    props.onEditNoteText(text);
-    props.onEditNoteColor(e.hex);
+    onEditNoteTitle(title);
+    onEditNoteText(text);
+    onEditNoteColor(e.hex);
   };
 
   return (
@@ -87,7 +86,7 @@ const EditNote = (props) => {
           },
         }}
       >
-        <Title type="text" name="" id="edit-title-input" value={updatedTitle} onChange={(e) => handleTitleOnChange(e.target.value)} style={{ marginLeft: "10px" }} />
+        <Title type="text" name="" id="edit-title-input" value={updatedTitle} onChange={(e) => handleTitleOnChange(e.target.value)} />
         <ReactQuill
           id="edit-text-input"
           placeholder="Take a note..."
@@ -96,7 +95,7 @@ const EditNote = (props) => {
           style={{ marginBottom: "20px", color: "black" }}
         />
         <div style={{ marginLeft: "20px", marginBottom: "-33px" }}>
-          <CirclePicker colors={colors} color={color} onChangeComplete={(e) => handleColorOnChange(e)} />
+          <CirclePicker colors={props.colors} color={colorValue} onChangeComplete={(e) => handleColorOnChange(e)} />
         </div>
         <div style={{ marginRight: "20px", marginBottom: "20px" }}>
           <Button className="btn-outline" style={{ backgroundColor: "#a05050", float: "right", borderColor: "#a05050" }} onClick={handleCloseModal}>

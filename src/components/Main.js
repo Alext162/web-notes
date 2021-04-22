@@ -64,6 +64,26 @@ const TextArea = styled.textarea`
 `;
 
 const Main = (props) => {
+  const {
+    onColorChange,
+    onColorFilterChange,
+    onGetData,
+    onTextChange,
+    onTitleChange,
+    onShowInput,
+    onTextFocus,
+    onTitleFocus,
+    showInput,
+    textValue,
+    onCreateNote,
+    notes,
+    onDeleteNote,
+    onEditNote,
+    onEditNoteText,
+    onEditNoteTitle,
+    onEditNoteColor,
+  } = props;
+
   const classes = useStyles();
   const [color, setColor] = useState("#2196f3");
   const [text, setText] = useState("");
@@ -78,36 +98,36 @@ const Main = (props) => {
 
   const handleColorChangeEvent = (color) => {
     setColor(color.hex);
-    props.onColorChange(color.hex);
+    onColorChange(color.hex);
   };
 
   const handleColorFilterEvent = (filterColor) => {
     setFilterColor(filterColor.hex);
-    props.onColorFilterChange(filterColor.hex);
+    onColorFilterChange(filterColor.hex);
   };
 
   const handleResetClick = () => {
-    props.onGetData();
+    onGetData();
     setFilterColor("#000000");
     setColor("#000000");
-    props.onColorFilterChange("#000000");
+    onColorFilterChange("#000000");
     toast.info("Filters Reset!");
   };
 
   const handleTextInput = (value) => {
     setText(value);
-    props.onTextChange(value);
+    onTextChange(value);
   };
 
   const handleTitleInput = (value) => {
     setTitle(value);
-    props.onTitleChange(value);
+    onTitleChange(value);
   };
 
   return (
     <main>
       <NoteInput action="">
-        {!props.showInput ? (
+        {!showInput ? (
           <>
             <TextArea
               name=""
@@ -115,16 +135,16 @@ const Main = (props) => {
               cols="30"
               rows="1"
               placeholder="Take a note..."
-              value={props.textValue}
+              value={textValue}
               onFocus={() => {
-                props.onShowInput(true);
-                props.onTextFocus(true);
+                onShowInput(true);
+                onTextFocus(true);
                 textAreaRef.current.focus();
               }}
               onInput={() => autoGrow(textAreaRef)}
               ref={textAreaRef}
-              onBlur={() => props.onTextFocus(false)}
-              onChange={(e) => props.onTextChange(e.target.value)}
+              onBlur={() => onTextFocus(false)}
+              onChange={(e) => onTextChange(e.target.value)}
             />
           </>
         ) : (
@@ -135,8 +155,8 @@ const Main = (props) => {
               id="title-input"
               placeholder="Enter Title..."
               value={title}
-              onFocus={() => props.onTitleFocus(true)}
-              onBlur={() => props.onTitleFocus(false)}
+              onFocus={() => onTitleFocus(true)}
+              onBlur={() => onTitleFocus(false)}
               onChange={(e) => handleTitleInput(e.target.value)}
             />
             <ReactQuill
@@ -144,11 +164,11 @@ const Main = (props) => {
               value={text}
               onChange={(e) => handleTextInput(e)}
               onFocus={() => {
-                props.onShowInput(true);
-                props.onTextFocus(true);
+                onShowInput(true);
+                onTextFocus(true);
                 textAreaRef.current.focus();
               }}
-              onBlur={() => props.onTextFocus(false)}
+              onBlur={() => onTextFocus(false)}
               ref={textAreaRef}
               style={{ marginBottom: "20px" }}
             />
@@ -156,16 +176,17 @@ const Main = (props) => {
               <CirclePicker colors={colors} color={color} onChangeComplete={(e) => handleColorChangeEvent(e)} />
             </div>
             <div style={{ position: "absolute", marginLeft: "400px", marginTop: "-5px" }}>
-              <Button className="btn-outline" style={{ backgroundColor: "#a05050", float: "right", borderColor: "#a05050" }} onClick={() => props.onShowInput(false)}>
+              <Button className="btn-outline" style={{ backgroundColor: "#a05050", float: "right", borderColor: "#a05050" }} onClick={() => onShowInput(false)}>
                 Close
               </Button>
               <Button
                 className="btn-outline bt-m"
                 style={{ backgroundColor: "#505c75", float: "right", borderColor: "#505c75", marginRight: "10px" }}
                 onClick={() => {
-                  props.onCreateNote();
+                  onCreateNote();
                   setText("");
                   setTitle("");
+                  setColor("#000000");
                 }}
               >
                 Add Note
@@ -186,7 +207,7 @@ const Main = (props) => {
       </div>
       <div className={classes.root}>
         <Grid container justify="center">
-          {props.notes.map((note, index) => (
+          {notes.map((note, index) => (
             <Grid item lg key={index}>
               <Paper
                 className={classes.paper}
@@ -204,12 +225,13 @@ const Main = (props) => {
               >
                 <Note
                   note={note}
-                  onDeleteNote={(state) => props.onDeleteNote(state)}
-                  onEditNote={(id) => props.onEditNote(id)}
+                  onDeleteNote={(state) => onDeleteNote(state)}
+                  onEditNote={(id, originalColor) => onEditNote(id, originalColor)}
                   key={note.id}
-                  onEditNoteText={(state) => props.onEditNoteText(state)}
-                  onEditNoteTitle={(state) => props.onEditNoteTitle(state)}
-                  onEditNoteColor={(state) => props.onEditNoteColor(state)}
+                  onEditNoteText={(state) => onEditNoteText(state)}
+                  onEditNoteTitle={(state) => onEditNoteTitle(state)}
+                  onEditNoteColor={(state) => onEditNoteColor(state)}
+                  colors={colors}
                 />
               </Paper>
             </Grid>
